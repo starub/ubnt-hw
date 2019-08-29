@@ -1,5 +1,7 @@
 package lv.starub.ubnt.configuration;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -7,13 +9,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "stream")
 public class SSEStreamProperties {
 
+    @Getter
+    @Setter
     private String url;
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }
