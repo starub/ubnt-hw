@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public class RedditPost implements Serializable {
+public class Post implements Serializable {
 
     @JsonProperty
     private String author;

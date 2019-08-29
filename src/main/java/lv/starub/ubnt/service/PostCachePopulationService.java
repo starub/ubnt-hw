@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.core.HazelcastInstance;
 import lombok.RequiredArgsConstructor;
 import lv.starub.ubnt.configuration.SSEStreamProperties;
+import lv.starub.ubnt.domain.Post;
 import lv.starub.ubnt.domain.PostType;
-import lv.starub.ubnt.domain.RedditPost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -21,7 +21,7 @@ import java.time.Instant;
 
 @Component
 @RequiredArgsConstructor
-class SSEStreamCacheLoader {
+class PostCachePopulationService {
 
     private final SSEStreamProperties streamProperties;
 
@@ -29,7 +29,7 @@ class SSEStreamCacheLoader {
 
     private final ObjectMapper objectMapper;
 
-    private Logger logger = LoggerFactory.getLogger(SSEStreamCacheLoader.class);
+    private Logger logger = LoggerFactory.getLogger(PostCachePopulationService.class);
 
     @PostConstruct
     void init() {
@@ -45,7 +45,7 @@ class SSEStreamCacheLoader {
                 .bodyToFlux(type);
 
         eventStream.subscribe(
-                this::handleContent,
+                this::handleEvent,
                 this::handleError,
                 this::handleCompletion);
     }
@@ -58,16 +58,16 @@ class SSEStreamCacheLoader {
         logger.error("Error receiving SSE: {}", error);
     }
 
-    private void handleContent(ServerSentEvent<String> content) {
+    private void handleEvent(ServerSentEvent<String> event) {
 
         logger.info("Received event: name[{}], id [{}], data[{}], comment[{}]",
-                content.event(), content.id(), content.data(), content.comment());
+                event.event(), event.id(), event.data(), event.comment());
         try {
 
-            RedditPost post = objectMapper.readValue(content.data(), RedditPost.class);
+            Post post = objectMapper.readValue(event.data(), Post.class);
 
             post.setTimestamp(Instant.now());
-            post.setPostType("rs".equals(content.event()) ? PostType.SUBMISSION : PostType.COMMENT);
+            post.setPostType("rs".equals(event.event()) ? PostType.SUBMISSION : PostType.COMMENT);
 
             if (!StringUtils.isEmpty(post.getSubreddit())) {
                 hazelcastInstance.getMap("ALL_POSTS").put(post.getTimestamp(), post);
