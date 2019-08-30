@@ -32,7 +32,15 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
 }
 
+test {
+    systemProperty 'spring.profiles.active', "test"
+}
+
 bootJar {
-    mainClassName = 'lv.starub.ubnt.SSEStreamParserApplication'
+    mainClassName = 'lv.starub.ubnt.Application'
+}
+
+bootRun {
+    systemProperty 'spring.profiles.active', "${springProfile}"
 }
 

@@ -8,6 +8,7 @@ import lv.starub.ubnt.domain.Post;
 import lv.starub.ubnt.domain.PostType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.time.Instant;
 
 @Component
 @RequiredArgsConstructor
+@Profile("prod")
 class PostCachePopulationService {
 
     private final SSEStreamProperties streamProperties;
