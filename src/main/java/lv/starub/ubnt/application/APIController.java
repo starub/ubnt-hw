@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-class API {
+class APIController {
 
     private static final String API_V_1 = "/api/v1/";
 
