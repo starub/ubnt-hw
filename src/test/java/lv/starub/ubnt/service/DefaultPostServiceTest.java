@@ -2,6 +2,7 @@ package lv.starub.ubnt.service;
 
 import lv.starub.ubnt.domain.Post;
 import lv.starub.ubnt.domain.PostPeriod;
+import lv.starub.ubnt.domain.PostType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,22 +51,23 @@ class DefaultPostServiceTest {
         assertThat(posts).extracting(Post::getSubreddit).containsExactly("one hour subreddit", "five minutes subreddit", "one minute subreddit", "current subreddit");
     }
 
-//    @Test
-//    @DisplayName("Test retrieval of all posts within none/ALL_TIME period")
-//    void testAllPostsRetrieval() {
-//        Collection<Post> posts = postService.posts(Optional.empty());
-//        assertThat(posts).hasSize(5);
-//        assertThat(posts).extracting(Post::getSubreddit).containsExactly("one day subreddit","one hour subreddit","five minutes subreddit","one minute subreddit", "current subreddit");
-//
-//        posts = postService.posts(Optional.of(PostPeriod.ALL_TIME));
-//        assertThat(posts).hasSize(5);
-//        assertThat(posts).extracting(Post::getSubreddit).containsExactly("one day subreddit","one hour subreddit","five minutes subreddit","one minute subreddit", "current subreddit");
-//    }
+    @Test
+    @DisplayName("Test retrieval of all posts within none/ALL_TIME period")
+    void testAllPostsRetrieval() {
+        Collection<Post> posts = postService.posts(Optional.empty());
+        assertThat(posts).hasSize(5);
+        assertThat(posts).extracting(Post::getSubreddit).containsExactly("one day subreddit", "one hour subreddit", "five minutes subreddit", "one minute subreddit", "current subreddit");
 
-//    @Test
-//    @DisplayName("Test comments and submissions count within period")
-//    void testCommentAndSubmissionCount() {
-//        assertThat(postService.count(PostType.COMMENT,Optional.empty())).isEqualTo("\r\n3 COMMENTS\r\n");
-//        assertThat(postService.count(PostType.SUBMISSION,Optional.of(PostPeriod.ALL_TIME))).isEqualTo("\r\n2 SUBMISSIONS\r\n");
-//    }
+        posts = postService.posts(Optional.of(PostPeriod.ALL_TIME));
+        assertThat(posts).hasSize(5);
+        assertThat(posts).extracting(Post::getSubreddit).containsExactly("one day subreddit", "one hour subreddit", "five minutes subreddit", "one minute subreddit", "current subreddit");
+    }
+
+    @Test
+    @DisplayName("Test comments and submissions count within period")
+    void testCommentAndSubmissionCount() {
+        assertThat(postService.count(PostType.COMMENT, Optional.empty())).isEqualTo("\r\n3 COMMENT(S)\r\n");
+        assertThat(postService.count(PostType.SUBMISSION, Optional.of(PostPeriod.ALL_TIME))).isEqualTo("\r\n2 SUBMISSION(S)\r\n");
+        assertThat(postService.count(PostType.COMMENT, Optional.of(PostPeriod.ONE_MINUTE))).isEqualTo("\r\n1 COMMENT(S)\r\n");
+    }
 }

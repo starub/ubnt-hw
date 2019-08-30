@@ -32,7 +32,7 @@ public class DefaultPostService implements PostService {
     @Override
     public String count(PostType type, Optional<PostPeriod> period) {
         Collection<Post> posts = posts(period);
-        return String.format("\r\n%d %sS\r\n", posts.stream().filter(post -> type == post.getPostType()).count(), type);
+        return String.format("\r\n%d %s(S)\r\n", posts.stream().filter(post -> type == post.getPostType()).count(), type);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class DefaultPostService implements PostService {
 
     @Override
     public String activity(Optional<PostPeriod> period) {
-        return String.format("\r\n%d POSTS\r\n %s %s\r\n", posts(period).size(), count(PostType.SUBMISSION, period), count(PostType.COMMENT, period));
+        return String.format("\r\n%d POST(S)\r\n %s %s\r\n", posts(period).size(), count(PostType.SUBMISSION, period), count(PostType.COMMENT, period));
     }
 
 }

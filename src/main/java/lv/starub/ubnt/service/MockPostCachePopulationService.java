@@ -7,10 +7,12 @@ import lv.starub.ubnt.domain.Post;
 import lv.starub.ubnt.domain.PostPeriod;
 import lv.starub.ubnt.domain.PostType;
 import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.Instant;
 
+@Component
 @RequiredArgsConstructor
 @Profile({"dev", "test"})
 public class MockPostCachePopulationService {
