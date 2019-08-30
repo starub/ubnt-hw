@@ -70,4 +70,24 @@ class DefaultPostServiceTest {
         assertThat(postService.count(PostType.SUBMISSION, Optional.of(PostPeriod.ALL_TIME))).isEqualTo("\r\n2 SUBMISSION(S)\r\n");
         assertThat(postService.count(PostType.COMMENT, Optional.of(PostPeriod.ONE_MINUTE))).isEqualTo("\r\n1 COMMENT(S)\r\n");
     }
+
+    @Test
+    @DisplayName("Test retrieval of top(N) most active subreddits")
+    void testMostActiveSubredditTop() {
+        assertThat(postService.top(Optional.empty())).hasSize(5);
+        assertThat(postService.top(Optional.of(Long.valueOf(1)))).hasSize(1);
+        assertThat(postService.top(Optional.of(Long.valueOf(2)))).hasSize(2);
+        assertThat(postService.top(Optional.of(Long.valueOf(3)))).hasSize(3);
+        assertThat(postService.top(Optional.of(Long.valueOf(4)))).hasSize(4);
+        assertThat(postService.top(Optional.of(Long.valueOf(5)))).hasSize(5);
+        assertThat(postService.top(Optional.of(Long.valueOf(6)))).hasSize(5);
+    }
+
+    @Test
+    @DisplayName("Test Reddit stream activity within period")
+    void testRedditStreamActivity() {
+        assertThat(postService.activity(Optional.empty())).contains("5 POST(S)").contains("2 SUBMISSION(S)").contains("3 COMMENT(S)");
+        assertThat(postService.activity(Optional.of(PostPeriod.ONE_MINUTE))).contains("1 POST(S)").contains("0 SUBMISSION(S)").contains("1 COMMENT(S)");
+    }
+
 }
