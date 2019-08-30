@@ -7,12 +7,10 @@ import com.hazelcast.core.IMap;
 import lv.starub.ubnt.configuration.SSEStreamProperties;
 import lv.starub.ubnt.domain.Post;
 import lv.starub.ubnt.domain.PostType;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.codec.ServerSentEvent;
@@ -35,24 +33,19 @@ import static org.mockito.Mockito.when;
 class PostCachePopulationServiceTest {
 
     @Mock
-    IMap map;
-
-    @Mock
     HazelcastInstance hazelcastInstance;
-
-    @Spy
-    ObjectMapper objectMapper;
 
     @Mock
     SSEStreamProperties properties;
 
+    @Mock
+    IMap map;
+
+    @Spy
+    ObjectMapper objectMapper;
+
     @InjectMocks
     PostCachePopulationService service;
-
-    @Before
-    public void before() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     void init() throws IOException {
@@ -104,4 +97,5 @@ class PostCachePopulationServiceTest {
 
         verify(serviceSpy, atMostOnce()).handleError(any(Throwable.class));
     }
+
 }
