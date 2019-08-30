@@ -3,11 +3,10 @@ package lv.starub.ubnt.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.core.HazelcastInstance;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lv.starub.ubnt.configuration.SSEStreamProperties;
 import lv.starub.ubnt.domain.Post;
 import lv.starub.ubnt.domain.PostType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.codec.ServerSentEvent;
@@ -17,11 +16,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.time.Instant;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 @Profile("prod")
 class PostCachePopulationService {
 
@@ -31,20 +30,11 @@ class PostCachePopulationService {
 
     private final ObjectMapper objectMapper;
 
-    private Logger logger = LoggerFactory.getLogger(PostCachePopulationService.class);
 
     @PostConstruct
     void init() {
 
-        WebClient client = WebClient.create(streamProperties.getUrl());
-        ParameterizedTypeReference<ServerSentEvent<String>> type
-                = new ParameterizedTypeReference<ServerSentEvent<String>>() {
-        };
-
-        Flux<ServerSentEvent<String>> eventStream = client.get()
-                .uri("/")
-                .retrieve()
-                .bodyToFlux(type);
+        Flux<ServerSentEvent<String>> eventStream = getSSEEventStream();
 
         eventStream.subscribe(
                 this::handleEvent,
@@ -52,17 +42,17 @@ class PostCachePopulationService {
                 this::handleCompletion);
     }
 
-    private void handleCompletion() {
-        logger.info("Completed");
+    void handleCompletion() {
+        log.info("SSE stream completed");
     }
 
-    private void handleError(Throwable error) {
-        logger.error("Error receiving SSE: {}", error);
+    void handleError(Throwable e) {
+        log.error("Error receiving SSE stream", e);
     }
 
-    private void handleEvent(ServerSentEvent<String> event) {
+    void handleEvent(ServerSentEvent<String> event) {
 
-        logger.info("Received event: name[{}], id [{}], data[{}], comment[{}]",
+        log.info("Received event: name[{}], id [{}], data[{}], comment[{}]",
                 event.event(), event.id(), event.data(), event.comment());
         try {
 
@@ -75,10 +65,22 @@ class PostCachePopulationService {
                 hazelcastInstance.getMap("ALL_POSTS").put(post.getTimestamp(), post);
             }
 
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+        } catch (Throwable e) {
+            log.error("Error parsing SSE", e);
         }
 
+    }
+
+    Flux<ServerSentEvent<String>> getSSEEventStream() {
+        WebClient client = WebClient.create(streamProperties.getUrl());
+        ParameterizedTypeReference<ServerSentEvent<String>> type
+                = new ParameterizedTypeReference<ServerSentEvent<String>>() {
+        };
+
+        return client.get()
+                .uri("/")
+                .retrieve()
+                .bodyToFlux(type);
     }
 
 }
