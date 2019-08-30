@@ -15,7 +15,7 @@ import java.time.Instant;
 @Component
 @RequiredArgsConstructor
 @Profile({"dev", "test"})
-public class MockPostCachePopulationService {
+class MockPostCachePopulationService {
 
     private final HazelcastInstance hazelcastInstance;
 
