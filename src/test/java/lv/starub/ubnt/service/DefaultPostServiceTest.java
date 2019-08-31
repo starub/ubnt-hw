@@ -79,13 +79,13 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("Test retrieval of top(N) most active subreddits")
     void testMostActiveSubredditTop() {
-        assertThat(postService.top(Optional.empty())).hasSize(5);
-        assertThat(postService.top(Optional.of(Long.valueOf(1)))).hasSize(1);
-        assertThat(postService.top(Optional.of(Long.valueOf(2)))).hasSize(2);
-        assertThat(postService.top(Optional.of(Long.valueOf(3)))).hasSize(3);
-        assertThat(postService.top(Optional.of(Long.valueOf(4)))).hasSize(4);
-        assertThat(postService.top(Optional.of(Long.valueOf(5)))).hasSize(5);
-        assertThat(postService.top(Optional.of(Long.valueOf(6)))).hasSize(5);
+        assertThat(postService.top((long) 100)).hasSize(5);
+
+        assertThat(postService.top((long) 1)).hasSize(1);
+        assertThat(postService.top((long) 2)).hasSize(2);
+        assertThat(postService.top((long) 3)).hasSize(3);
+        assertThat(postService.top((long) 4)).hasSize(4);
+        assertThat(postService.top((long) 5)).hasSize(5);
     }
 
     @Test

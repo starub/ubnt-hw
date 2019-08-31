@@ -14,7 +14,7 @@ public interface PostService {
 
     String count(PostType type, Optional<PostPeriod> period);
 
-    Map<String, Long> top(Optional<Long> limit);
+    Map<String, Long> top(Long limit);
 
     String activity(Optional<PostPeriod> period);
 }

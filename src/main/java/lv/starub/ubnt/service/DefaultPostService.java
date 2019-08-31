@@ -36,7 +36,7 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
-    public Map<String, Long> top(Optional<Long> maxEntries) {
+    public Map<String, Long> top(Long maxEntries) {
         Collection<Post> posts = posts(Optional.of(PostPeriod.ALL_TIME));
 
         return posts.stream()
@@ -44,7 +44,7 @@ public class DefaultPostService implements PostService {
                 .entrySet().stream()
                 .sorted(comparing(Map.Entry<String, Long>::getValue).thenComparing(Map.Entry::getKey)
                         .reversed())
-                .limit(maxEntries.orElse(Long.MAX_VALUE))
+                .limit(maxEntries)
                 .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
 
     }

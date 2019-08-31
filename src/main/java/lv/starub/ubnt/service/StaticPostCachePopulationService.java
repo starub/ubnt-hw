@@ -25,7 +25,7 @@ class StaticPostCachePopulationService {
         Instant now = Instant.now();
 
         Post current = new Post();
-        current.setTimestamp(now);
+        current.setTimestamp(now.minusSeconds(1));
         current.setSubreddit("current subreddit");
         current.setBody("current post");
         current.setPostType(PostType.COMMENT);

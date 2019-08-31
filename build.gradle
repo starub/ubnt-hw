@@ -23,8 +23,9 @@ dependencies {
 
     compile 'io.springfox:springfox-swagger2:2.9.+'
     compile 'io.springfox:springfox-swagger-ui:2.9.+'
+    compile 'io.springfox:springfox-bean-validators:2.9.+'
 
-    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'junit', module: 'junit'
     }
 
@@ -52,6 +53,6 @@ bootJar {
 }
 
 bootRun {
-    systemProperty 'spring.profiles.active',  "${springProfile}"
+    systemProperty 'spring.profiles.active', "${springProfile}"
 }
 

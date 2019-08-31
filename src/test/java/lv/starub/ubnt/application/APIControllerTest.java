@@ -25,7 +25,7 @@ class APIControllerTest {
     void testRedditStreamActivity() {
         EntityExchangeResult<String> result = client
                 .get()
-                .uri("/api/v1/activity")
+                .uri("/api/v1/posts/activity")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
@@ -35,14 +35,28 @@ class APIControllerTest {
                 .contains("5 POST(S)")
                 .contains("3 COMMENT(S)")
                 .contains("2 SUBMISSION(S)");
+
+        result = client
+                .get()
+                .uri("/api/v1/posts/activity/ONE_MINUTE")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .returnResult();
+
+        assertThat(result.getResponseBody())
+                .contains("1 POST(S)")
+                .contains("1 COMMENT(S)")
+                .contains("0 SUBMISSION(S)");
+
     }
 
     @Test
-    @DisplayName("Test retrieving top subreddits")
-    void testRetrievingTopSubreddits() {
+    @DisplayName("Test retrieving top 2 subreddits")
+    void testRetrievingTop2Subreddits() {
         client
                 .get()
-                .uri("/api/v1/top/2")
+                .uri("/api/v1/posts/top/2")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -56,11 +70,20 @@ class APIControllerTest {
     void testRetrievingPostCount() {
         client
                 .get()
-                .uri("/api/v1/count/COMMENT")
+                .uri("/api/v1/posts/count/COMMENT")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .isEqualTo("\r\n3 COMMENT(S)\r\n");
+
+        client
+                .get()
+                .uri("/api/v1/posts/count/COMMENT/ONE_MINUTE")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .isEqualTo("\r\n1 COMMENT(S)\r\n");
+
     }
 
     @Test
@@ -68,7 +91,15 @@ class APIControllerTest {
     void testRetrievingAllPosts() {
         client
                 .get()
-                .uri("/api/v1/posts/ALL_TIME")
+                .uri("/api/v1/posts/ONE_MINUTE")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[*].subreddit",
+                        "current subreddit");
+        client
+                .get()
+                .uri("/api/v1/posts")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -77,6 +108,7 @@ class APIControllerTest {
                         "five minutes subreddit",
                         "one minute subreddit",
                         "current subreddit");
+
     }
 
 }
