@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lv.starub.ubnt.domain.Post;
-import lv.starub.ubnt.domain.PostPeriod;
 import lv.starub.ubnt.domain.PostType;
+import lv.starub.ubnt.domain.TimePeriod;
 import lv.starub.ubnt.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,26 +34,26 @@ class APIController {
     }
 
     @GetMapping("/{period}")
-    @ApiOperation("Returns cached posts within time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)")
-    ResponseEntity<Collection<Post>> postsByPeriod(@PathVariable("period") @ApiParam(value = "Time period", defaultValue = "ALL_TIME", example = "ALL_TIME") Optional<PostPeriod> period) {
+    @ApiOperation("Returns cached posts within time period.")
+    ResponseEntity<Collection<Post>> postsByPeriod(@PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "ONE_MINUTE", example = "ALL_TIME") Optional<TimePeriod> period) {
         return new ResponseEntity<>(postService.posts(period), HttpStatus.OK);
     }
 
     @GetMapping("/count/{type}")
     @ApiOperation("Returns all cached posts by type.")
-    ResponseEntity<String> countByType(@PathVariable("type") @ApiParam(value = "Post type (SUBMISSION,COMMENT)", required = true, defaultValue = "COMMENT", example = "COMMENT") PostType type) {
+    ResponseEntity<String> countByType(@PathVariable("type") @ApiParam(value = "Post type", required = true, defaultValue = "COMMENT", example = "COMMENT") PostType type) {
         return new ResponseEntity<>(postService.count(type, Optional.empty()), HttpStatus.OK);
     }
 
     @GetMapping("/count/{type}/{period}")
-    @ApiOperation("Returns cached posts by type within time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)")
-    ResponseEntity<String> count(@PathVariable("type") @ApiParam(value = "Post type (SUBMISSION,COMMENT)", required = true, defaultValue = "COMMENT", example = "COMMENT") PostType type, @PathVariable("period") @ApiParam(value = "Time period", example = "ALL_TIME") Optional<PostPeriod> period) {
+    @ApiOperation("Returns cached posts by type within time period.")
+    ResponseEntity<String> count(@PathVariable("type") @ApiParam(value = "Post type", required = true, defaultValue = "COMMENT", example = "COMMENT") PostType type, @PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "FIVE_MINUTES", example = "ALL_TIME") Optional<TimePeriod> period) {
         return new ResponseEntity<>(postService.count(type, period), HttpStatus.OK);
     }
 
     @GetMapping("/top/{maxEntries}")
     @ApiOperation("Returns top N subreddits by SUBMISSION and COMMENT sum.")
-    ResponseEntity<Map<String, Long>> top(@PathVariable("maxEntries") @ApiParam(value = "Max entries", required = true, defaultValue = "5", example = "100") Long maxEntries) {
+    ResponseEntity<Map<String, Long>> top(@PathVariable("maxEntries") @ApiParam(value = "Max entries", format = "###", required = true, defaultValue = "5", example = "100") Long maxEntries) {
         return new ResponseEntity<>(postService.top(maxEntries), HttpStatus.OK);
     }
 
@@ -64,8 +64,8 @@ class APIController {
     }
 
     @GetMapping("/activity/{period}")
-    @ApiOperation("Returns number of cached POSTS,SUBMISSIONS and COMMENTS within time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)")
-    ResponseEntity<String> activity(@PathVariable("period") @ApiParam(value = "Time period", defaultValue = "ALL_TIME", example = "ALL_TIME") Optional<PostPeriod> period) {
+    @ApiOperation("Returns number of cached POSTS,SUBMISSIONS and COMMENTS within time period.")
+    ResponseEntity<String> activity(@PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "FIVE_MINUTES", example = "ALL_TIME") Optional<TimePeriod> period) {
         return new ResponseEntity<>(postService.activity(period), HttpStatus.OK);
     }
 

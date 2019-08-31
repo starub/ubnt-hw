@@ -1,8 +1,8 @@
 package lv.starub.ubnt.service;
 
 import lv.starub.ubnt.domain.Post;
-import lv.starub.ubnt.domain.PostPeriod;
 import lv.starub.ubnt.domain.PostType;
+import lv.starub.ubnt.domain.TimePeriod;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("Test retrieval of all posts within one minute period")
     void testPostsRetrievalOneMinuteInterval() {
-        Collection<Post> posts = postService.posts(Optional.of(PostPeriod.ONE_MINUTE));
+        Collection<Post> posts = postService.posts(Optional.of(TimePeriod.ONE_MINUTE));
         assertThat(posts).hasSize(1);
         assertThat(posts).extracting(Post::getSubreddit).containsExactly("current subreddit");
     }
@@ -35,7 +35,7 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("Test retrieval of all posts within five minutes period")
     void testPostsRetrievalFiveMinutesInterval() {
-        Collection<Post> posts = postService.posts(Optional.of(PostPeriod.FIVE_MINUTES));
+        Collection<Post> posts = postService.posts(Optional.of(TimePeriod.FIVE_MINUTES));
         assertThat(posts).hasSize(2);
         assertThat(posts).extracting(Post::getSubreddit).containsExactly("one minute subreddit", "current subreddit");
     }
@@ -43,7 +43,7 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("Test retrieval of all posts within one hour period")
     void testPostsRetrievalOneHourInterval() {
-        Collection<Post> posts = postService.posts(Optional.of(PostPeriod.ONE_HOUR));
+        Collection<Post> posts = postService.posts(Optional.of(TimePeriod.ONE_HOUR));
         assertThat(posts).hasSize(3);
         assertThat(posts).extracting(Post::getSubreddit).containsExactly("five minutes subreddit", "one minute subreddit", "current subreddit");
     }
@@ -51,7 +51,7 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("Test retrieval of all posts within one day period")
     void testPostsRetrievalOneDayInterval() {
-        Collection<Post> posts = postService.posts(Optional.of(PostPeriod.ONE_DAY));
+        Collection<Post> posts = postService.posts(Optional.of(TimePeriod.ONE_DAY));
         assertThat(posts).hasSize(4);
         assertThat(posts).extracting(Post::getSubreddit).containsExactly("one hour subreddit", "five minutes subreddit", "one minute subreddit", "current subreddit");
     }
@@ -63,7 +63,7 @@ class DefaultPostServiceTest {
         assertThat(posts).hasSize(5);
         assertThat(posts).extracting(Post::getSubreddit).containsExactly("one day subreddit", "one hour subreddit", "five minutes subreddit", "one minute subreddit", "current subreddit");
 
-        posts = postService.posts(Optional.of(PostPeriod.ALL_TIME));
+        posts = postService.posts(Optional.of(TimePeriod.ALL_TIME));
         assertThat(posts).hasSize(5);
         assertThat(posts).extracting(Post::getSubreddit).containsExactly("one day subreddit", "one hour subreddit", "five minutes subreddit", "one minute subreddit", "current subreddit");
     }
@@ -72,8 +72,8 @@ class DefaultPostServiceTest {
     @DisplayName("Test comments and submissions count within period")
     void testCommentAndSubmissionCount() {
         assertThat(postService.count(PostType.COMMENT, Optional.empty())).isEqualTo("\r\n3 COMMENT(S)\r\n");
-        assertThat(postService.count(PostType.SUBMISSION, Optional.of(PostPeriod.ALL_TIME))).isEqualTo("\r\n2 SUBMISSION(S)\r\n");
-        assertThat(postService.count(PostType.COMMENT, Optional.of(PostPeriod.ONE_MINUTE))).isEqualTo("\r\n1 COMMENT(S)\r\n");
+        assertThat(postService.count(PostType.SUBMISSION, Optional.of(TimePeriod.ALL_TIME))).isEqualTo("\r\n2 SUBMISSION(S)\r\n");
+        assertThat(postService.count(PostType.COMMENT, Optional.of(TimePeriod.ONE_MINUTE))).isEqualTo("\r\n1 COMMENT(S)\r\n");
     }
 
     @Test
@@ -92,7 +92,7 @@ class DefaultPostServiceTest {
     @DisplayName("Test Reddit stream activity within period")
     void testRedditStreamActivity() {
         assertThat(postService.activity(Optional.empty())).contains("5 POST(S)").contains("2 SUBMISSION(S)").contains("3 COMMENT(S)");
-        assertThat(postService.activity(Optional.of(PostPeriod.ONE_MINUTE))).contains("1 POST(S)").contains("0 SUBMISSION(S)").contains("1 COMMENT(S)");
+        assertThat(postService.activity(Optional.of(TimePeriod.ONE_MINUTE))).contains("1 POST(S)").contains("0 SUBMISSION(S)").contains("1 COMMENT(S)");
     }
 
 }
