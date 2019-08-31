@@ -23,6 +23,7 @@
 **Installation**
 
 1. `git clone https://github.com/starub/ubnt-hw.git`
+2. `cd ubnt-hw`
 2. `./gradlew clean build`
 
 **Launch**
