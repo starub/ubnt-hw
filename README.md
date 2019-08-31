@@ -14,7 +14,7 @@
 8. AssertJ (assertions library)
 9. Mockito (mock testing framework)
 
-**Pre-requisites**
+**Prerequisites**
 
 1. Java >= 1.8 
 2. Gradle >= 5.6.1
