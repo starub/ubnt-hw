@@ -43,3 +43,10 @@
 1. Launch application
 2. Open URL `http://localhost:8080/swagger-ui.html` for API documentation and GUI
 3. Also possible using `curl` utility, e.g `curl http://localhost:8080/api/v1/posts/ALL_TIME`
+
+**Questions/Comments ?**
+
+Please contact me for details
+
+# Thanks!
+
