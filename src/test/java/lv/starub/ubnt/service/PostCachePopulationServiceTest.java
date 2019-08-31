@@ -48,6 +48,7 @@ class PostCachePopulationServiceTest {
     PostCachePopulationService service;
 
     @Test
+    @SuppressWarnings("unchecked")
     void init() throws IOException {
 
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
