@@ -21,6 +21,7 @@ import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
@@ -80,9 +81,9 @@ class PostCachePopulationServiceTest {
 
         serviceSpy.init();
 
-        verify(map, atMostOnce()).put(any(Instant.class), any(Post.class));
-        verify(serviceSpy, atMostOnce()).handleEvent(event);
-        verify(serviceSpy, atMostOnce()).handleCompletion();
+        verify(map, atLeastOnce()).put(any(Instant.class), any(Post.class));
+        verify(serviceSpy, atLeastOnce()).handleEvent(event);
+        verify(serviceSpy, atLeastOnce()).handleCompletion();
         verify(serviceSpy, never()).handleError(any(Throwable.class));
 
 
@@ -90,13 +91,13 @@ class PostCachePopulationServiceTest {
 
         serviceSpy.init();
 
-        verify(serviceSpy, atMostOnce()).handleError(any(Throwable.class));
+        verify(serviceSpy, atLeastOnce()).handleError(any(Throwable.class));
 
         doReturn(Flux.just(ServerSentEvent.builder().build())).when(serviceSpy).getSSEEventStream();
 
         serviceSpy.init();
 
-        verify(serviceSpy, atMostOnce()).handleError(any(Throwable.class));
+        verify(serviceSpy, atLeastOnce()).handleError(any(Throwable.class));
     }
 
 }
