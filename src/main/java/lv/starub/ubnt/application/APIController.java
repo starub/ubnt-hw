@@ -35,7 +35,7 @@ class APIController {
 
     @GetMapping("/{period}")
     @ApiOperation("Returns cached posts within time period.")
-    ResponseEntity<Collection<Post>> postsByPeriod(@PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "ONE_MINUTE", example = "ALL_TIME") Optional<TimePeriod> period) {
+    ResponseEntity<Collection<Post>> postsByPeriod(@PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "ONE_MINUTE", example = "ONE_MINUTE") Optional<TimePeriod> period) {
         return new ResponseEntity<>(postService.posts(period), HttpStatus.OK);
     }
 
@@ -47,13 +47,13 @@ class APIController {
 
     @GetMapping("/count/{type}/{period}")
     @ApiOperation("Returns cached posts by type within time period.")
-    ResponseEntity<String> count(@PathVariable("type") @ApiParam(value = "Post type", required = true, defaultValue = "COMMENT", example = "COMMENT") PostType type, @PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "FIVE_MINUTES", example = "ALL_TIME") Optional<TimePeriod> period) {
+    ResponseEntity<String> count(@PathVariable("type") @ApiParam(value = "Post type", required = true, defaultValue = "COMMENT", example = "COMMENT") PostType type, @PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "ONE_HOUR", example = "ONE_HOUR") Optional<TimePeriod> period) {
         return new ResponseEntity<>(postService.count(type, period), HttpStatus.OK);
     }
 
     @GetMapping("/top/{maxEntries}")
     @ApiOperation("Returns top N subreddits by SUBMISSION and COMMENT sum.")
-    ResponseEntity<Map<String, Long>> top(@PathVariable("maxEntries") @ApiParam(value = "Max entries", format = "###", required = true, defaultValue = "5", example = "100") Long maxEntries) {
+    ResponseEntity<Map<String, Long>> top(@PathVariable("maxEntries") @ApiParam(value = "Max entries", format = "###", required = true, defaultValue = "100", example = "100") Long maxEntries) {
         return new ResponseEntity<>(postService.top(maxEntries), HttpStatus.OK);
     }
 
@@ -65,7 +65,7 @@ class APIController {
 
     @GetMapping("/activity/{period}")
     @ApiOperation("Returns number of cached POSTS,SUBMISSIONS and COMMENTS within time period.")
-    ResponseEntity<String> activity(@PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "FIVE_MINUTES", example = "ALL_TIME") Optional<TimePeriod> period) {
+    ResponseEntity<String> activity(@PathVariable("period") @ApiParam(value = "Time period (ONE_MINUTE,FIVE_MINUTES,ONE_HOUR,ONE_DAY,ALL_TIME)", defaultValue = "FIVE_MINUTES", example = "FIVE_MINUTES") Optional<TimePeriod> period) {
         return new ResponseEntity<>(postService.activity(period), HttpStatus.OK);
     }
 
