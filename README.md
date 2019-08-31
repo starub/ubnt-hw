@@ -30,6 +30,7 @@
 
 1. production mode - `./gradlew clean bootRun`
 2. development mode (static cache entries) - `./gradlew -PspringProfile=dev clean bootRun`
+3. Hit `Ctrl-C` to stop
 
 **Tests & Coverage**
 
