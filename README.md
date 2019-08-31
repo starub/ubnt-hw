@@ -8,11 +8,11 @@
 2. Spring Boot 2 (executable fat jar extension with embedded Tomcat server)
 3. Spring Webflux (reactive streams library for SSE steam parsing)
 4. Hazelcast (cache)
-4. Lombok (boilerplate code reduction)
-5. Swagger/Swagger UI (API documentation & GUI)
-6. Junit 5 (testing framework)
-7. AssertJ (assertions library)
-8. Mockito (mock testing framework)
+5. Lombok (boilerplate code reduction)
+6. Swagger/Swagger UI (API documentation & GUI)
+7. Junit 5 (testing framework)
+8. AssertJ (assertions library)
+9. Mockito (mock testing framework)
 
 **Pre-requisites**
 
@@ -24,13 +24,14 @@
 
 1. `git clone https://github.com/starub/ubnt-hw.git`
 2. `cd ubnt-hw`
-2. `./gradlew clean build`
+3. `./gradlew clean build`
 
 **Launch**
 
 1. production mode - `./gradlew clean bootRun`
 2. development mode (static cache entries) - `./gradlew -PspringProfile=dev clean bootRun`
-3. hit `ctrl-c` to stop
+3. standalone jar - `./gradlew clean bootJar`, `cd build/libs`, `java -jar -Dspring.profiles.active=prod ubnt-hw.jar` 
+4. hit `ctrl-c` to stop
 
 **Tests & Coverage**
 
@@ -39,6 +40,6 @@
 
 **Usage**
 
-1. `./gradlew clean bootRun`
+1. Launch application
 2. Open URL `http://localhost:8080/swagger-ui.html` for API documentation and GUI
 3. Also possible using `curl` utility, e.g `curl http://localhost:8080/api/v1/posts/ALL_TIME`
