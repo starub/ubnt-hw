@@ -4,7 +4,7 @@
 
 **Technology stack**
 
-1. Java 8
+1. JDK 1.8
 2. Spring 5 (core framework)
 3. Spring Boot 2 (executable fat jar extension with embedded Tomcat server)
 4. Spring Webflux (reactive streams library for SSE steam parsing)
@@ -17,7 +17,7 @@
 
 **Prerequisites**
 
-1. Java >= 1.8 
+1. JRE >= 1.8 
 2. Gradle >= 5.2
 3. Git >= 2.0
 
